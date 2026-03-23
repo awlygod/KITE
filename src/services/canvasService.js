@@ -4,7 +4,7 @@ import { collection, addDoc, updateDoc, doc, onSnapshot, getDoc, setDoc, deleteD
 export const canvasService = {
   async saveCanvas(canvasData) {
     try {
-      // Strip undefined values — Firestore rejects them
+      // strip undefined values
       const clean = JSON.parse(JSON.stringify(canvasData));
       const docRef = await addDoc(collection(db, 'canvases'), {
         ...clean,
@@ -21,7 +21,7 @@ export const canvasService = {
 
   async updateCanvas(canvasId, canvasData) {
     try {
-      // Strip undefined values — Firestore rejects them
+      // strip undefined values
       const clean = JSON.parse(JSON.stringify(canvasData));
       const canvasRef = doc(db, 'canvases', canvasId);
       await updateDoc(canvasRef, {
@@ -64,7 +64,7 @@ export const canvasService = {
     }
   },
 
-  // ── Presence ──────────────────────────────────────────────────────────────
+  // checking the presence
   async joinPresence(canvasId, user) {
     const ref = doc(db, 'canvases', canvasId, 'presence', user.uid);
     await setDoc(ref, {
@@ -80,7 +80,7 @@ export const canvasService = {
   async leavePresence(canvasId, uid) {
     try {
       await deleteDoc(doc(db, 'canvases', canvasId, 'presence', uid));
-    } catch (_) { /* ignore */ }
+    } catch (_) {  }
   },
 
   subscribeToPresence(canvasId, callback) {
@@ -90,7 +90,7 @@ export const canvasService = {
     );
   },
 
-  // ── Comments ──────────────────────────────────────────────────────────────
+  // comments
   async addComment(canvasId, commentData) {
     const ref = collection(db, 'canvases', canvasId, 'comments');
     await addDoc(ref, {
